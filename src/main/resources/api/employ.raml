@@ -1,0 +1,72 @@
+#%RAML 1.0
+title: Employee System API
+version: v1
+baseUri: http://localhost:8081/api/{version}
+mediaType: application/json
+
+types:
+  Employee:
+    type: object
+    properties:
+      empId?: integer
+      name: string
+      department: string
+      salary: number
+    example:
+      empId: 101
+      name: "Ravi Kumar"
+      department: "IT"
+      salary: 65000
+
+/employees:
+  get:
+    description: Retrieve all employees
+    responses:
+      200:
+        body:
+          application/json:
+            type: Employee[]
+            example:
+              - empId: 101
+                name: "Ravi Kumar"
+                department: "IT"
+                salary: 65000
+              - empId: 102
+                name: "Priya Sharma"
+                department: "HR"
+                salary: 58000
+
+  post:
+    description: Create a new employee record
+    body:
+      application/json:
+        type: Employee
+        example:
+          name: "Anil Reddy"
+          department: "Finance"
+          salary: 70000
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              message: "Employee created successfully"
+              empId: 103
+
+  /{empId}:
+    uriParameters:
+      empId:
+        type: integer
+        example: 101
+    get:
+      description: Get a single employee by ID
+      responses:
+        200:
+          body:
+            application/json:
+              type: Employee
+        404:
+          body:
+            application/json:
+              example:
+                error: "Employee not found"
